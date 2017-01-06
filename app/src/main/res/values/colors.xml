@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!-- color of status bar -->
+    <color name="colorPrimaryDark">#000000</color>
+    <!-- color of the toolbar -->
+    <color name="colorPrimary">#212121</color>
+    <!-- color of text from toolbar -->
+    <color name="textColorPrimary">#ffffff</color>
+    <!-- color of navigation arrow-top left corner- and overflow icon-top right corner- -->
+    <color name="textColorSecondary">#ffffff</color>
+
+    <color name="colorAccent">#f3fdba10</color>
+    <!-- color of the background of the application window -->
+    <color name="windowBackground">#6b6b6b</color>
+    <!-- color of unchecked checkbox -->
+    <color name="colorControlNormal">#f3eaeaea</color>
+    <!-- color of checked checkbox | default : colorAccent -->
+    <color name="colorControlActivated">#f3ff923f</color>
+    <!-- color of button -->
+    <color name="colorButtonNormal">#f3d9d9d9</color>
+
+    <color name="navigationBarColor">#00ff0000</color>
+
+    <color name="overflowMenuBg">#fffcfff6</color>
+
+    <!-- Grey Color Shades -->
+    <color name="grey_25">#FDFDFD</color>
+    <color name="grey_50">#FAFAFA</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_400">#BDBDBD</color>
+    <color name="grey_500">#9E9E9E</color>
+    <color name="grey_600">#757575</color>
+    <color name="grey_700">#616161</color>
+    <color name="grey_800">#424242</color>
+
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme only for Lollipop and above version feautures -->
+    <style name="MaterialAppBaseTheme" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Customize theme here : -->
+        <!--<item name="textColorPrimary">@color/textColorPrimary</item>
+        <item name="textColorSecondary">@color/textColorSecondary</item>-->
+    </style>
+</resources>
