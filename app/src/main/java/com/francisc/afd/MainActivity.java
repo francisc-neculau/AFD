@@ -1,31 +1,108 @@
 package com.francisc.afd;
 
-import android.os.PersistableBundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements FileDescriptorViewHolder.OnClickListener, View.OnClickListener
 {
-    private Toolbar toolbar;
+    /*
+    TO-DO:
+        AFD -  Create a file manager for Android. The user should be able to easily navigate through the filesystem and perform operations such as
+    --------
+    Optional
+    --------
+        I. make a bottom toolbar with following buttons :
+
+            1. Copy ( selected FileDescriptors )
+                - solves d.1 and d.2
+            2. Cut ( selected FileDescriptors )
+                - solves e.1 and e.2
+            3. Paste ( selected FileDescriptors )
+                - works with 1. and 2.
+            4. Delete ( selected FileDescriptors )
+                - solves b.1 and b.2
+
+        II. Make screen Orientation posibility + different display view
+
+        III. In the Toolbar display current folder + { storage folder + number of files }
+
+        IV. Make the Items Transparent
+
+        V. Sort the items
+    ---------
+    Mandatory
+    ---------
+        a.1 create a file
+        a.2 edit a text file
+        a.3 create a folder
+
+        b.1 deleting a file
+        b.2 deleting a folder
+
+        c.1 renaming a file
+        c.2 renaming a folder
+
+        d.1 copying a file
+        d.2 copying a folder,
+
+        e.1 moving a file
+        e.2 moving a folder
+
+     */
+    private Toolbar headerToolbar;
+    private RecyclerView recyclerView;
+    private MainActivityController listener;
+    private NavigationDrawerFragment navigationDrawerFragment;
+    private DirectoryExplorer explorer;
+    private FileDescriptorRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("AFD");
-        toolbar.setSubtitle("welcome");
+
+        listener = new MainActivityController();
+
+        /*
+            Toolbar
+         */
+        headerToolbar = (Toolbar) findViewById(R.id.MainActivity_Toolbar_headerToolbar);
+        headerToolbar.setTitle("AFD");
+        headerToolbar.setSubtitle("welcome");
+        headerToolbar.inflateMenu(R.menu.menu_activity_main);
+        headerToolbar.setOnMenuItemClickListener(listener);
+        headerToolbar.setNavigationIcon(R.drawable.back_normal);
+        headerToolbar.setNavigationOnClickListener(this);
+//        headerToolbar.setNavigationIcon();
+//        headerToolbar.setNavigationOnClickListener();
+        /*
+            Recycler View
+         */
+        recyclerView = (RecyclerView) findViewById(R.id.MainActivity_RecyclerView_RecyclerView);
+        explorer = new DirectoryExplorer(); // Maybe it should be a single threaded singleton !
+        adapter = new FileDescriptorRecyclerViewAdapter(this, explorer, this); // here indeed we should pass just a list !
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        /*
+            Navigation Drawer
+         */
+        navigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.nav_drwr_fragment);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationDrawerFragment.setUpDrawer(R.id.nav_drwr_fragment, drawerLayout, headerToolbar);
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
+    protected void onRestoreInstanceState(Bundle savedInstanceState) { super.onRestoreInstanceState(savedInstanceState); }
 
     @Override
     protected void onStart()
@@ -61,5 +138,41 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
+    }
+
+
+    public void goToInternalStorage(View view)
+    {
+        explorer.goTo(explorer.INTERNAL_STORAGE_ROOT_PATH);
+        // navigationDrawerFragment close the menu
+        adapter.notifyDataSetChanged();
+    }
+
+    public void goToExternalStorage(View view)
+    {
+        explorer.goTo(explorer.EXTERNAL_STORAGE_ROOT_PATH);
+        // navigationDrawerFragment close the menu
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(FileDescriptorViewHolder view)
+    {
+        if(view.getCurrent().isDirectory())
+        {
+            explorer.goTo(view.getCurrent().getPath());
+            adapter.notifyDataSetChanged();
+        }
+        else
+        {
+            //we should try to open if it is a txt file
+        }
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        explorer.goBack();
+        adapter.notifyDataSetChanged();
     }
 }

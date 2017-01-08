@@ -13,7 +13,7 @@
     <!-- color of the background of the application window -->
     <color name="windowBackground">#6b6b6b</color>
     <!-- color of unchecked checkbox -->
-    <color name="colorControlNormal">#f3eaeaea</color>
+    <color name="colorControlNormal">#f3515151</color>
     <!-- color of checked checkbox | default : colorAccent -->
     <color name="colorControlActivated">#f3ff923f</color>
     <!-- color of button -->

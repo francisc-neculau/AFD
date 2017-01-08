@@ -1,0 +1,92 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical">
+
+	<RelativeLayout
+		android:id="@+id/nav_header_container"
+		android:layout_width="match_parent"
+		android:layout_height="160dp"
+		android:background="@color/colorPrimary">
+
+		<ImageView
+			android:layout_width="70dp"
+			android:layout_height="70dp"
+			android:layout_centerInParent="true"
+			android:scaleType="fitCenter"/>
+
+	</RelativeLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="?attr/selectableItemBackground"
+		android:clickable="false"
+		android:gravity="center"
+		android:orientation="vertical">
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="5dp"
+			android:text="Storge"
+			android:textColor="@android:color/tertiary_text_light"
+			android:textSize="16sp"/>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="48dp"
+			android:background="?attr/selectableItemBackground"
+			android:clickable="true"
+			android:onClick="goToInternalStorage"
+			android:gravity="center"
+			android:orientation="horizontal">
+
+			<ImageView
+				android:layout_width="35dp"
+				android:layout_height="35dp"
+				android:layout_marginLeft="16dp"
+				android:layout_marginRight="16dp"
+				android:src="@drawable/local_files"
+				android:tint="@color/grey_500"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="16dp"
+				android:layout_marginRight="16dp"
+				android:text="Internal"
+				android:textColor="@android:color/tertiary_text_dark"
+				android:textSize="14sp"/>
+
+		</LinearLayout>
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="48dp"
+			android:background="?attr/selectableItemBackground"
+			android:clickable="true"
+			android:onClick="goToExternalStorage"
+			android:gravity="center"
+			android:orientation="horizontal">
+
+			<ImageView
+				android:layout_width="35dp"
+				android:layout_height="35dp"
+				android:layout_marginLeft="16dp"
+				android:layout_marginRight="16dp"
+				android:src="@drawable/sdcard"
+				android:tint="@color/grey_500"/>
+			<!--android:id="@+id/title"-->
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="16dp"
+				android:layout_marginRight="16dp"
+				android:text="External"
+				android:textColor="@android:color/tertiary_text_dark"
+				android:textSize="14sp"/>
+
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>
