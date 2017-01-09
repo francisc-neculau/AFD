@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="bottom"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="50dp">
 
     <android.support.v7.widget.Toolbar
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/actionbarT"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/colorPrimaryDark"
-        app:theme="@style/Base.Theme.AppCompat.CompactMenu" >
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimaryDark">
 
         <LinearLayout
             android:id="@+id/toolbarmenucontainer"
@@ -26,7 +28,7 @@
                 android:background="@color/colorPrimaryDark"
                 android:clickable="true"
                 android:scaleType="fitXY"
-                android:layout_weight = "1"
+                android:layout_weight = "1.00"
                 android:src="@drawable/btn_switch_grid_mode_off" />
 
             <ImageButton
@@ -50,6 +52,5 @@
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
-
 
 </LinearLayout>

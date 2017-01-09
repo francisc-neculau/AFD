@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context="com.francisc.afd.MainActivity">
 
+    <!-- Header Toolbar with options for : go back and main menu settings -->
     <android.support.v7.widget.Toolbar
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/MainActivity_Toolbar_headerToolbar"
@@ -22,10 +23,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/MainActivity_RecyclerView_RecyclerView"
+        <!--
+         + Need to think at another solution !
+         Developers Guide :
+                FrameLayout is designed to block out an area on the screen
+            to display a single item. Generally, FrameLayout should be
+            used to hold a single child view, because it can be difficult
+            to organize child views in a way that's scalable to different
+            screen sizes without the children overlapping each other.
+                You can, however, add multiple children to a FrameLayout and
+            control their position within the FrameLayout by assigning
+            gravity to each child, using the android:layout_gravity attribute.
+
+        -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Main List of items ( FileDescriptors ) -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/MainActivity_RecyclerView_RecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"/>
+
+            <!-- Footer Toolbar with options for : cut, copy, paste and delete -->
+            <include layout="@layout/footer_toolbar"/>
+
+        </FrameLayout>
+
 
         <fragment
             android:id="@+id/nav_drwr_fragment"
@@ -36,52 +63,5 @@
             tools:layout="@layout/fragment_navigation_drawer"/>
 
     </android.support.v4.widget.DrawerLayout>
-
-    <android.support.v7.widget.Toolbar
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/actionbarT"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorPrimaryDark"
-        app:theme="@style/Base.Theme.AppCompat.CompactMenu" >
-
-        <LinearLayout
-            android:id="@+id/toolbarmenucontainer"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:weightSum="3"
-            android:orientation="horizontal" >
-
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimaryDark"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                android:layout_weight = "1"
-                android:src="@drawable/btn_switch_grid_mode_off" />
-
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimaryDark"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                android:layout_weight = "1"
-                android:src="@drawable/btn_switch_grid_mode_off" />
-
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimaryDark"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                android:layout_weight = "1"
-                android:src="@drawable/btn_switch_grid_mode_off" />
-
-        </LinearLayout>
-
-    </android.support.v7.widget.Toolbar>
-
 
 </LinearLayout>
