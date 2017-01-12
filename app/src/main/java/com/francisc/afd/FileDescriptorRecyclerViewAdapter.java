@@ -6,23 +6,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+
+import java.util.ArrayList;
 
 /**
  * Created by franc on 1/7/2017.
  */
 
-public class FileDescriptorRecyclerViewAdapter extends RecyclerView.Adapter<FileDescriptorViewHolder>
+public class FileDescriptorRecyclerViewAdapter extends RecyclerView.Adapter<FileDescriptorViewHolder> /*implements  View.OnClickListener, CompoundButton.OnCheckedChangeListener*/
 {
-
     private static final String TAG = FileDescriptorRecyclerViewAdapter.class.getSimpleName();
 
-    private DirectoryExplorer dataList;
+    private ArrayList<FileDescriptor> fileDescriptorsList;
     private LayoutInflater inflater;
-    private FileDescriptorViewHolder.OnClickListener listener;
-    public FileDescriptorRecyclerViewAdapter(Context context, DirectoryExplorer dataList, FileDescriptorViewHolder.OnClickListener listener)
+    private FileDescriptorViewHolder.FileDescriptorListener listener;
+
+    public FileDescriptorRecyclerViewAdapter(Context context, FileDescriptorViewHolder.FileDescriptorListener listener)
     {
         this.inflater = LayoutInflater.from(context);
-        this.dataList = dataList;
         this.listener = listener;
     }
 
@@ -30,22 +32,48 @@ public class FileDescriptorRecyclerViewAdapter extends RecyclerView.Adapter<File
     public FileDescriptorViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View view = inflater.inflate(R.layout.card_view_file_descriptor, parent, false);
-        FileDescriptorViewHolder holder = new FileDescriptorViewHolder(view, listener);
+        FileDescriptorViewHolder holder = new FileDescriptorViewHolder(view);
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(FileDescriptorViewHolder holder, int position)
     {
-        FileDescriptor current = dataList.get(position);
-        holder.setData(current, position);
-        //holder.setListeners();
+        FileDescriptor fileDescriptor = fileDescriptorsList.get(position);
+        holder.setData(fileDescriptor, position);
+        holder.setMainListener(listener);
+        //holder.selectedCheckBox.setChecked();
+    }
+
+    @Override
+    public void onViewRecycled(FileDescriptorViewHolder holder) {
+        super.onViewRecycled(holder);
+        holder.selectedCheckBox.setOnCheckedChangeListener(null);
     }
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return fileDescriptorsList.size();
     }
+
+    public void setData(ArrayList<FileDescriptor> fileDescriptorsList) { this.fileDescriptorsList = fileDescriptorsList; }
+
+//    /*
+//     View.OnClickListener
+//     */
+//    @Override
+//    public void onClick(View v)
+//    {
+//        listener.onClicked((FileDescriptorViewHolder)v);
+//    }
+//    /*
+//    CompoundButton.OnCheckedChangeListener
+//     */
+//    @Override
+//    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//        listener.onCheckedChanged(FileDescriptorViewHolder.this);
+//    }
 
 //    public void removeItem(int position) {
 //        mDataList.remove(position);

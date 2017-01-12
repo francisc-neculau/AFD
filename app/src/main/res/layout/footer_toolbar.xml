@@ -7,6 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="50dp">
 
+
+
     <android.support.v7.widget.Toolbar
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/actionbarT"
@@ -19,7 +21,7 @@
             android:id="@+id/toolbarmenucontainer"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:weightSum="3"
+            android:weightSum="6"
             android:orientation="horizontal" >
 
             <ImageButton
@@ -27,27 +29,42 @@
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimaryDark"
                 android:clickable="true"
+                android:onClick="onClickButtonCut"
                 android:scaleType="fitXY"
                 android:layout_weight = "1.00"
-                android:src="@drawable/btn_switch_grid_mode_off" />
+                android:src="@drawable/btn_cut_off" />
+
 
             <ImageButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimaryDark"
                 android:clickable="true"
+                android:onClick="onClickButtonCopy"
                 android:scaleType="fitXY"
-                android:layout_weight = "1"
-                android:src="@drawable/btn_switch_grid_mode_off" />
+                android:layout_weight = "1.00"
+                android:src="@drawable/btn_copy_off"
+                android:id="@+id/imageButton" />
 
             <ImageButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimaryDark"
                 android:clickable="true"
+                android:onClick="onClickButtonPaste"
                 android:scaleType="fitXY"
-                android:layout_weight = "1"
-                android:src="@drawable/btn_switch_grid_mode_off" />
+                android:layout_weight = "1.00"
+                android:src="@drawable/btn_paste_on" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark"
+                android:clickable="true"
+                android:onClick="onClickButtonDelete"
+                android:scaleType="fitXY"
+                android:layout_weight = "1.00"
+                android:src="@drawable/btn_delete_off" />
 
         </LinearLayout>
 

@@ -3,6 +3,7 @@ package com.francisc.afd;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,67 +11,87 @@ import android.widget.TextView;
  * Created by franc on 1/7/2017.
  */
 
-public class FileDescriptorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+public class FileDescriptorViewHolder extends RecyclerView.ViewHolder
 {
-    private FileDescriptorViewHolder.OnClickListener listener;
+    ImageView typeImageView;
+    TextView  nameTextView;
+    TextView  detailsTextView;
+    CheckBox  selectedCheckBox;
 
-    private ImageView type;
-    private TextView name;
-    private TextView details;
-    private CheckBox isSelected;
+    private FileDescriptor fileDescriptor;
+    private int fileDescriptorPosition; // maybe this should not exist at all
 
-    private FileDescriptor current;
-    private int currentPosition; // maybe this should not exist at all
-
-    public FileDescriptorViewHolder(View view, FileDescriptorViewHolder.OnClickListener listener)
+    public FileDescriptorViewHolder(View view)
     {
         super(view);
-        type       = (ImageView) view.findViewById(R.id.FileDescriptor_ImageView_Type);
-        name       = (TextView)  view.findViewById(R.id.FileDescriptor_TextView_Name);
-        details    = (TextView)  view.findViewById(R.id.FileDescriptor_TextView_Details);
-        isSelected = (CheckBox)  view.findViewById(R.id.FileDescriptor_CheckBox_IsSelected);
-
-        this.listener = listener;
-
-        type.setOnClickListener(this);
+        typeImageView    = (ImageView) view.findViewById(R.id.FileDescriptor_ImageView_Type);
+        nameTextView     = (TextView)  view.findViewById(R.id.FileDescriptor_TextView_Name);
+        detailsTextView  = (TextView)  view.findViewById(R.id.FileDescriptor_TextView_Details);
+        selectedCheckBox = (CheckBox)  view.findViewById(R.id.FileDescriptor_CheckBox_IsSelected);
     }
 
-    public void setData(FileDescriptor current, int position)
+    public void setData(FileDescriptor fileDescriptor, int fileDescriptorPosition)
     {
-        if(current.isDirectory())
-            this.type.setImageResource(R.drawable.folder_103);
+        if(fileDescriptor.isDirectory())
+            this.typeImageView.setImageResource(R.drawable.folder_103);
         else
-            this.type.setImageResource(R.drawable.txt_103);
-        this.name.setText(current.getName());
-        this.details.setText(current.getDetails());
-        this.isSelected.setActivated(current.isSelected());
-        this.currentPosition = position;
-        this.current = current;
-    }
+            this.typeImageView.setImageResource(R.drawable.txt_103);
+        this.nameTextView.setText(fileDescriptor.getName());
+        this.detailsTextView.setText(fileDescriptor.getDetails());
+        this.selectedCheckBox.setChecked(fileDescriptor.isSelected());
 
-    @Override
-    public void onClick(View v)
-    {
-        listener.onClick(this);
-    }
-
-    interface OnClickListener
-    {
-        public void onClick(FileDescriptorViewHolder view);
+        this.fileDescriptorPosition = fileDescriptorPosition;
+        this.fileDescriptor = fileDescriptor;
     }
 
     public int getCurrentPosition()
     {
-        return this.currentPosition;
+        return this.fileDescriptorPosition;
     }
 
-    public FileDescriptor getCurrent() {
-        return current;
-    }
+    public FileDescriptor getCurrent() { return fileDescriptor; }
 
     public void setCurrent(FileDescriptor current) {
-        this.current = current;
+        this.fileDescriptor = current;
+    }
+
+    public boolean isChecked() { return this.selectedCheckBox.isChecked(); }
+
+    interface FileDescriptorListener
+    {
+        public void onClicked(FileDescriptorViewHolder view);
+        public void onCheckedChanged(FileDescriptorViewHolder view);
+    }
+
+    public void setMainListener(final FileDescriptorListener listener)
+    {
+        typeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onClicked(FileDescriptorViewHolder.this);
+            }
+        });
+        selectedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                FileDescriptorViewHolder.this.fileDescriptor.setIsSelected(isChecked);
+                listener.onCheckedChanged(FileDescriptorViewHolder.this);
+            }
+        });
+//        selectedCheckBox.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v)
+//            {
+//                if(FileDescriptorViewHolder.this.selectedCheckBox.isActivated())
+//                    FileDescriptorViewHolder.this.selectedCheckBox.setActivated(false);
+//                else
+//                    FileDescriptorViewHolder.this.selectedCheckBox.setActivated(true);
+//                FileDescriptorViewHolder.this.fileDescriptor.setIsSelected();
+//                adapter.notifyItemChanged(FileDescriptorViewHolder.this.fileDescriptorPosition);
+//                listener.onCheckedChanged(FileDescriptorViewHolder.this);
+//            }
+//        });
     }
 
 }
-

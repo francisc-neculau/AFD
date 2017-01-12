@@ -6,12 +6,12 @@ package com.francisc.afd;
 
 public class FileDescriptor
 {
-    // TO-DO : Make a display name and details triming !
+    // TO-DO : Make a display nameTextView and detailsTextView triming !
     private String path;
     private String name;
     private String details;
+    private boolean isSelected;
     private Type type;
-    private boolean selected;
 
     enum Type
     {
@@ -19,13 +19,13 @@ public class FileDescriptor
         Directory
     }
 
-    public FileDescriptor(String path, String name, String details, Type type)
+    public FileDescriptor(String path, String name, String details, boolean isSelected, Type type)
     {
         this.path = path;
         this.name = name;
         this.details = details;
+        this.isSelected = isSelected;
         this.type = type;
-        this.selected = false;
     }
 
     public String getPath() {
@@ -60,13 +60,9 @@ public class FileDescriptor
         this.type = type;
     }
 
-    public boolean isSelected() {
-        return selected;
-    }
+    public boolean isSelected() { return isSelected; }
 
-    public void setSelected(boolean isSelected) {
-        this.selected = isSelected;
-    }
+    public void setIsSelected(boolean isSelected) { this.isSelected = isSelected; }
 
     public boolean isDirectory()
     {

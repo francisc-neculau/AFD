@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements FileDescriptorViewHolder.OnClickListener, View.OnClickListener
+public class MainActivity extends AppCompatActivity implements FileDescriptorViewHolder.FileDescriptorListener, View.OnClickListener
 {
     /*
     TO-DO:
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
 
      */
     private Toolbar headerToolbar;
+    private Toolbar footerToolbar;
     private RecyclerView recyclerView;
     private MainActivityController listener;
     private NavigationDrawerFragment navigationDrawerFragment;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
         listener = new MainActivityController();
 
         /*
-            Toolbar
+            Header Toolbar and Footer Toolbar
          */
         headerToolbar = (Toolbar) findViewById(R.id.MainActivity_Toolbar_headerToolbar);
         headerToolbar.setTitle("AFD");
@@ -79,15 +80,19 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
         headerToolbar.inflateMenu(R.menu.menu_activity_main);
         headerToolbar.setOnMenuItemClickListener(listener);
         headerToolbar.setNavigationIcon(R.drawable.back_normal);
+        headerToolbar.set
         headerToolbar.setNavigationOnClickListener(this);
+
+        footerToolbar = (Toolbar) findViewById(R.id.MainActivity_Toolbar_headerToolbar);
 //        headerToolbar.setNavigationIcon();
 //        headerToolbar.setNavigationOnClickListener();
         /*
             Recycler View
          */
         recyclerView = (RecyclerView) findViewById(R.id.MainActivity_RecyclerView_RecyclerView);
-        explorer = new DirectoryExplorer(); // Maybe it should be a single threaded singleton !
-        adapter = new FileDescriptorRecyclerViewAdapter(this, explorer, this); // here indeed we should pass just a list !
+        explorer = new DirectoryExplorer(this.getApplicationContext()); // Maybe it should be a single threaded singleton !
+        adapter = new FileDescriptorRecyclerViewAdapter(this, this); // here indeed we should pass just a list !
+        adapter.setData(explorer.getData());
         recyclerView.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -156,11 +161,12 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
     }
 
     @Override
-    public void onClick(FileDescriptorViewHolder view)
+    public void onClicked(FileDescriptorViewHolder view)
     {
         if(view.getCurrent().isDirectory())
         {
             explorer.goTo(view.getCurrent().getPath());
+            adapter.setData(explorer.getData());
             adapter.notifyDataSetChanged();
         }
         else
@@ -170,9 +176,52 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
     }
 
     @Override
+    public void onCheckedChanged(FileDescriptorViewHolder view)
+    {
+        if(view.isChecked())
+            explorer.pushCheckedStack(view.getCurrent().getPath());
+        else
+            explorer.removeFromCheckedStack(view.getCurrent().getPath());
+    }
+
+    @Override
     public void onClick(View v)
     {
         explorer.goBack();
+        adapter.setData(explorer.getData());
         adapter.notifyDataSetChanged();
     }
+
+    /*
+    Actions of the Header Toolbar
+     */
+    public void onClickButtonCut(View view)
+    {
+        explorer.setFlushCheckedStackType(explorer.FLUSH_TYPE_CUT);
+    }
+
+    public void onClickButtonCopy(View view)
+    {
+        explorer.setFlushCheckedStackType(explorer.FLUSH_TYPE_COPY);
+    }
+
+    public void onClickButtonPaste(View view)
+    {
+        explorer.flushCheckedStack();
+        explorer.refresh();
+        adapter.setData(explorer.getData());
+        adapter.notifyDataSetChanged();
+    }
+
+    public void onClickButtonDelete(View view)
+    {
+        // Cannot delete if not on the directory with the files to be deleted !
+        explorer.setFlushCheckedStackType(explorer.FLUSH_TYPE_DELETE);
+        // this should be divided with a AlerdDialog !
+        explorer.flushCheckedStack();
+        explorer.refresh();
+        adapter.setData(explorer.getData());
+        adapter.notifyDataSetChanged();
+    }
+
 }
