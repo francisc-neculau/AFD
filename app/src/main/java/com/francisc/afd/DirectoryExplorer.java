@@ -33,7 +33,7 @@ public class DirectoryExplorer
     // when you go back to a file that has been moved it should kill the rest of the navigationHistoryStack
     private  ArrayList<FileDescriptor> list;
     private HashMap<Integer, FileDescriptor> checked;
-
+    private String root;
     private ArrayDeque<String> checkedStack;
     private String checkedStackDirectoryPath;
     private String flushType;
@@ -48,7 +48,8 @@ public class DirectoryExplorer
         flushType = "";
         navigationHistoryStack = new ArrayDeque<String>();
         list  = new ArrayList<FileDescriptor>();
-        goTo(INTERNAL_STORAGE_ROOT_PATH);
+        root = INTERNAL_STORAGE_ROOT_PATH;
+        goTo(root);
     }
 
     private void setUpTemporaryDirectory()
@@ -321,4 +322,42 @@ public class DirectoryExplorer
         }
         return true;
     }
+
+    public String getCurrentPath()
+    {
+        return navigationHistoryStack.peek();
+    }
+
+    public String getCurrentFileDescriptorName()
+    {
+        return navigationHistoryStack.peek().substring(navigationHistoryStack.peek().lastIndexOf("/"));
+    }
+
+    public String getRoot()
+    {
+        switch (root)
+        {
+            case INTERNAL_STORAGE_ROOT_PATH:
+                return "Internal";
+            default:
+                return "External";
+        }
+    }
+
+    public void setRoot(String root)
+    {
+        this.root = root;
+        this.goTo(root);
+    }
+
+    public boolean isEmptyCheckedStack()
+    {
+        return this.checkedStack.isEmpty();
+    }
+
+    public void writeNewFile(String path)
+    {
+        // write the file
+    }
+
 }

@@ -47,6 +47,7 @@
                 android:id="@+id/imageButton" />
 
             <ImageButton
+                android:id="@+id/pasteButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimaryDark"
@@ -54,7 +55,7 @@
                 android:onClick="onClickButtonPaste"
                 android:scaleType="fitXY"
                 android:layout_weight = "1.00"
-                android:src="@drawable/btn_paste_on" />
+                android:src="@drawable/btn_paste_off" />
 
             <ImageButton
                 android:layout_width="0dp"
@@ -64,7 +65,18 @@
                 android:onClick="onClickButtonDelete"
                 android:scaleType="fitXY"
                 android:layout_weight = "1.00"
-                android:src="@drawable/btn_delete_off" />
+                android:src="@drawable/btn_delete_on" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark"
+                android:clickable="true"
+                android:onClick="onClickButtonNewFile"
+                android:scaleType="fitXY"
+                android:layout_weight = "1.00"
+                android:src="@drawable/btn_newfile_off" />
+
 
         </LinearLayout>
 

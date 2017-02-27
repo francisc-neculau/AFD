@@ -1,5 +1,6 @@
 package com.francisc.afd;
 
+import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity implements FileDescriptorViewHolder.FileDescriptorListener, View.OnClickListener
 {
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
         e.2 moving a folder
 
      */
+
     private Toolbar headerToolbar;
     private Toolbar footerToolbar;
     private RecyclerView recyclerView;
@@ -75,12 +78,12 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
             Header Toolbar and Footer Toolbar
          */
         headerToolbar = (Toolbar) findViewById(R.id.MainActivity_Toolbar_headerToolbar);
-        headerToolbar.setTitle("AFD");
-        headerToolbar.setSubtitle("welcome");
+        headerToolbar.setTitle("");
         headerToolbar.inflateMenu(R.menu.menu_activity_main);
         headerToolbar.setOnMenuItemClickListener(listener);
-        headerToolbar.setNavigationIcon(R.drawable.back_normal);
-        headerToolbar.set
+        //headerToolbar.setNavigationIcon(R.drawable.back_normal);
+
+        headerToolbar.setNavigationIcon(R.drawable.abs__ic_ab_back_holo_dark);
         headerToolbar.setNavigationOnClickListener(this);
 
         footerToolbar = (Toolbar) findViewById(R.id.MainActivity_Toolbar_headerToolbar);
@@ -104,10 +107,17 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
         navigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.nav_drwr_fragment);
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationDrawerFragment.setUpDrawer(R.id.nav_drwr_fragment, drawerLayout, headerToolbar);
+
+        headerToolbar.setTitle(explorer.getCurrentFileDescriptorName());
+        headerToolbar.setSubtitle(explorer.getRoot());
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) { super.onRestoreInstanceState(savedInstanceState); }
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+        this.explorer.goTo(savedInstanceState.getString("PATH"));
+    }
 
     @Override
     protected void onStart()
@@ -131,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
+        outState.putString("PATH", this.explorer.getCurrentPath());
     }
 
     @Override
@@ -166,6 +177,8 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
         if(view.getCurrent().isDirectory())
         {
             explorer.goTo(view.getCurrent().getPath());
+            headerToolbar.setTitle(explorer.getCurrentFileDescriptorName());
+            headerToolbar.setSubtitle(explorer.getRoot());
             adapter.setData(explorer.getData());
             adapter.notifyDataSetChanged();
         }
@@ -182,12 +195,16 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
             explorer.pushCheckedStack(view.getCurrent().getPath());
         else
             explorer.removeFromCheckedStack(view.getCurrent().getPath());
+        if(explorer.isEmptyCheckedStack())
+            ((ImageView)findViewById(R.id.pasteButton)).setBackgroundResource(R.drawable.btn_paste_off);
     }
 
     @Override
     public void onClick(View v)
     {
         explorer.goBack();
+        headerToolbar.setTitle(explorer.getCurrentFileDescriptorName());
+        headerToolbar.setSubtitle(explorer.getRoot());
         adapter.setData(explorer.getData());
         adapter.notifyDataSetChanged();
     }
@@ -198,11 +215,15 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
     public void onClickButtonCut(View view)
     {
         explorer.setFlushCheckedStackType(explorer.FLUSH_TYPE_CUT);
+        if(!explorer.isEmptyCheckedStack())
+            ((ImageView)findViewById(R.id.pasteButton)).setBackgroundResource(R.drawable.btn_paste_on);
     }
 
     public void onClickButtonCopy(View view)
     {
         explorer.setFlushCheckedStackType(explorer.FLUSH_TYPE_COPY);
+        if(!explorer.isEmptyCheckedStack())
+            ((ImageView)findViewById(R.id.pasteButton)).setBackgroundResource(R.drawable.btn_paste_on);
     }
 
     public void onClickButtonPaste(View view)
@@ -211,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
         explorer.refresh();
         adapter.setData(explorer.getData());
         adapter.notifyDataSetChanged();
+        ((ImageView)findViewById(R.id.pasteButton)).setBackgroundResource(R.drawable.btn_paste_off);
     }
 
     public void onClickButtonDelete(View view)
@@ -222,6 +244,16 @@ public class MainActivity extends AppCompatActivity implements FileDescriptorVie
         explorer.refresh();
         adapter.setData(explorer.getData());
         adapter.notifyDataSetChanged();
+    }
+
+    public void onClickButtonNewFile(View view)
+    {
+        /*
+        Open editing activity
+        insert text blabla
+        closing, return the data and explorer must create the file
+         */
+        Intent intent = new Intent();
     }
 
 }
